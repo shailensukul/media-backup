@@ -2,14 +2,21 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
+    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
     class Program
     {
         static void Main(string[] args)
         {
             if (args.Length > 0)
             {
-                var info = ImageHelper.EXIFData(File.ReadAllBytes(args[0]));
-                Console.WriteLine($"{info.Width}x{info.Height} | BPP: {info.PixelType.BitsPerPixel}");
+                var tags = ImageHelper.EXIFData(File.ReadAllBytes($"{args[0]}"));
+
+                foreach (var tag in tags)
+                {
+                    Console.WriteLine($"Tag: {tag.Key} | Value: {tag.Value}");
+                }
+                Console.ReadLine();
             }
         }
     }

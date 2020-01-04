@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "media-backup": {
+      "commandName": "Project",
+      "commandLineArgs": "Test.jpg"
+    }
+  }
+}
