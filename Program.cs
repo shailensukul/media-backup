@@ -9,6 +9,7 @@
         static void Main(string[] args)
         {
             if (args.Length > 0)
+            // https://andrewlock.net/using-dependency-injection-in-a-net-core-console-application/
             {
                 var tags = ImageHelper.EXIFData(File.ReadAllBytes($"{args[0]}"));
 
