@@ -2,7 +2,7 @@
   "profiles": {
     "media-backup": {
       "commandName": "Project",
-      "commandLineArgs": "Test.jpg"
+      "commandLineArgs": "-s C:\\Users\\shail\\Pictures -d D:\\Temp\\Copytest -i true -v false"
     }
   }
 }
