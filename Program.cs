@@ -10,10 +10,10 @@ namespace Sukul.Media.Backup
     using System.IO;
     using System.Reflection;
     using CommandLine;
-    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
     class Program
     {
+        static IMediaProcessor processor  = new FileSystemProcessor();
 
         static void Main(string[] args)
         {
@@ -24,18 +24,9 @@ namespace Sukul.Media.Backup
 
             //if (args.Length > 0)
             //// https://andrewlock.net/using-dependency-injection-in-a-net-core-console-application/
-            //{
-            //    var tags = ImageHelper.EXIFData(File.ReadAllBytes($"{args[0]}"));
-
-            //    foreach (var tag in tags)
-            //    {
-            //        Console.WriteLine($"Tag: {tag.Key} | Value: {tag.Value}");
-            //    }
-            //    Console.ReadLine();
-            //}
         }
 
-        static void RunOptions(Options opts)
+        static async void RunOptions(Options opts)
         {
             //handle options
             Trace.Indent();
@@ -44,6 +35,11 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"Copy images: {opts.Images}");
             Trace.WriteLine($"Copy videos: {opts.Videos}");
 
+            var files = await processor.List(opts.SourcePath, true, opts.Images, opts.Videos);
+            foreach (var file in files)
+            {
+                Trace.WriteLine($"{file}");
+            }
             Console.ReadLine();
         }
         static void HandleParseError(IEnumerable<Error> errs)

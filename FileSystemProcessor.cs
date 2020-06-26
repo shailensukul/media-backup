@@ -7,6 +7,7 @@ namespace Sukul.Media.Backup
     using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
+    using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 
     public class FileSystemProcessor : IMediaProcessor
     {
