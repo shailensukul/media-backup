@@ -2,11 +2,13 @@ namespace Sukul.Media.Backup
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.IO;
+    using System.Linq;
     using System.Security.Cryptography;
     using System.Threading.Tasks;
 
-    public class FileSystemDestination : IMediaDestination
+    public class FileSystemProcessor : IMediaProcessor
     {
         public async Task<bool> Exists(string path, byte[] fileData)
         {
@@ -40,11 +42,30 @@ namespace Sukul.Media.Backup
             throw new ApplicationException($"Path {path} does not exist");
         }
 
-        public async Task<IList<string>> List(string path, bool recursive = false)
+        public async Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos)
         {
+            SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+            Collection<string> filters = new Collection<string>();
+            if (searchImages)
+            {
+                filters.Add(".jpg");
+                filters.Add(".jpeg");
+                filters.Add(".png");
+                filters.Add(".gif");
+            }
+
+            if (searchVideos)
+            {
+                filters.Add(".mp4");
+                filters.Add(".avi");
+            }
+
+
             if (Directory.Exists(path))
             {
-                return new List<string>(Directory.GetFiles(path));
+                return Directory.EnumerateFiles(path, "*.*", option)
+                    .Where(f => filters.Any(f.ToLower().EndsWith))
+                    .ToList();
             }
             throw new ApplicationException($"Path {path} does not exist");
         }
