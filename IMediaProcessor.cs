@@ -7,7 +7,7 @@ namespace Sukul.Media.Backup
     public interface IMediaProcessor {
 
         public Task<bool> Exists(string path, byte[] fileData);
-        public Task Save(string path, string fileName, byte[] fileData);
+        public Task Save(string path, byte[] fileData);
         public Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos);
     }
 }

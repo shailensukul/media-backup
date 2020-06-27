@@ -20,7 +20,7 @@ namespace Sukul.Media.Backup
                 {
                     copyFilehash = Convert.ToBase64String(sha1.ComputeHash(fileData));
 
-                    foreach (var file in Directory.GetFiles(path))
+                    foreach (var file in await this.List(path, false, true, true))
                     {
                         var existingFileHash = Convert.ToBase64String(sha1.ComputeHash(File.ReadAllBytes(file)));
                         if (copyFilehash == existingFileHash)
@@ -33,14 +33,27 @@ namespace Sukul.Media.Backup
             return false;
         }
 
-        public async Task Save(string path, string fileName, byte[] fileData)
+        private string GetHash(byte[] fileData)
         {
-            if (Directory.Exists(path))
+            using (SHA1CryptoServiceProvider sha1 = new SHA1CryptoServiceProvider())
             {
-                await File.WriteAllBytesAsync(path, fileData);
-                return;
+                return Convert.ToBase64String(sha1.ComputeHash(fileData));
             }
-            throw new ApplicationException($"Path {path} does not exist");
+        }
+
+        public async Task Save(string path, byte[] fileData)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string destinationFileName = this.GetHash(fileData);
+            if (!await this.Exists(path, fileData))
+            {
+                await File.WriteAllBytesAsync($"{path}\\{destinationFileName}", fileData);
+            }
+            return;
         }
 
         public async Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos)
