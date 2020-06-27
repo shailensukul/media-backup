@@ -39,13 +39,13 @@ namespace Sukul.Media.Backup
             var files = await processor.List(opts.SourcePath, true, opts.Images, opts.Videos);
             foreach (var file in files)
             {
-                Copy(file);
+                Copy(file, opts.DestinationPath);
                 Trace.WriteLine($"{file}");
             }
             Console.ReadLine();
         }
 
-        static void Copy(string filename)
+        static void Copy(string filename, string topDestinationFolder)
         {
             DateTime dateTime;
             byte[] data = File.ReadAllBytes(filename);
@@ -57,11 +57,11 @@ namespace Sukul.Media.Backup
                 DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
                 CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime);
                 {
-                    desinationFolder = $"{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                    desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
                 }
             }
             dateTime = File.GetCreationTime(filename);
-            desinationFolder= $"{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+            desinationFolder= $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
             processor.Save(desinationFolder, File.ReadAllBytes(filename));
 
         }
