@@ -7,13 +7,14 @@ namespace Sukul.Media.Backup
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Globalization;
     using System.IO;
     using System.Reflection;
     using CommandLine;
 
     class Program
     {
-        static IMediaProcessor processor  = new FileSystemProcessor();
+        static IMediaProcessor processor = new FileSystemProcessor();
 
         static void Main(string[] args)
         {
@@ -38,10 +39,30 @@ namespace Sukul.Media.Backup
             var files = await processor.List(opts.SourcePath, true, opts.Images, opts.Videos);
             foreach (var file in files)
             {
+                Trace.WriteLine(DetermineDestination(file));
                 Trace.WriteLine($"{file}");
             }
             Console.ReadLine();
         }
+
+        static string DetermineDestination(string filename)
+        {
+            DateTime dateTime;
+            byte[] data = File.ReadAllBytes(filename);
+            var tags = ImageHelper.EXIFData(data);
+            object date;
+            if (tags.TryGetValue("DateTime", out date))
+            {
+                DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
+                CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime);
+                {
+                    return $"{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}\\{Path.GetFileName(filename)}";
+                }
+            }
+            dateTime = File.GetCreationTime(filename);
+            return $"{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}\\{Path.GetFileName(filename)}";
+        }
+
         static void HandleParseError(IEnumerable<Error> errs)
         {
             //handle errors

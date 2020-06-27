@@ -12,9 +12,12 @@ namespace Sukul.Media.Backup
         public static Dictionary<string, object> EXIFData(byte[] data) {
             var info = Image.Identify(new MemoryStream(data));
             Dictionary<string, object> tags = new Dictionary<string, object>();
-            foreach (var t in info.Metadata?.ExifProfile?.Values)
+            if (info.Metadata?.ExifProfile != null)
             {
-                tags.Add(t.Tag.ToString(), t.Value);
+                foreach (var t in info.Metadata?.ExifProfile?.Values)
+                {
+                    tags.Add(t.Tag.ToString(), t.Value);
+                }
             }
             return tags;
         }
