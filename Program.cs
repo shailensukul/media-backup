@@ -47,22 +47,27 @@ namespace Sukul.Media.Backup
 
         static void Copy(string filename, string topDestinationFolder)
         {
-            DateTime dateTime;
+            DateTime dateTime = default(DateTime);
             byte[] data = File.ReadAllBytes(filename);
             var tags = ImageHelper.EXIFData(data);
             object date;
             string desinationFolder;
             if (tags.TryGetValue("DateTime", out date))
             {
-                DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
-                CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime);
+                if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
+                CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
                 {
-                    desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                    {
+                        desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                    }
                 }
             }
-            dateTime = File.GetCreationTime(filename);
+            if (dateTime == default(DateTime))
+            {
+                dateTime = File.GetCreationTime(filename);
+            }
             desinationFolder= $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-            processor.Save(desinationFolder, File.ReadAllBytes(filename));
+            processor.Save(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
 
         }
 

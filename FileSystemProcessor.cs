@@ -41,14 +41,18 @@ namespace Sukul.Media.Backup
             }
         }
 
-        public async Task Save(string path, byte[] fileData)
+        public async Task Save(string path, byte[] fileData, string extension)
         {
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            string destinationFileName = this.GetHash(fileData);
+            // string destinationFileName = this.GetHash(fileData);
+            string destinationFileName = Path.GetRandomFileName();
+
+            destinationFileName = Path.ChangeExtension(destinationFileName, extension);
+
             if (!await this.Exists(path, fileData))
             {
                 await File.WriteAllBytesAsync($"{path}\\{destinationFileName}", fileData);
