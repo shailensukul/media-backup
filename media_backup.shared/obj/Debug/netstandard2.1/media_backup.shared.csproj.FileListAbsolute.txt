@@ -6,3 +6,4 @@ D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.s
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.AssemblyInfo.cs
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.dll
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.pdb
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.csprojAssemblyReference.cache
