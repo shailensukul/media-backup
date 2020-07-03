@@ -1,0 +1,6 @@
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.0\ImageHelper.cs
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.0\media_backup.shared.deps.json
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.0\media_backup.shared.dll
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.0\media_backup.shared.csprojAssemblyReference.cache
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.0\media_backup.shared.AssemblyInfoInputs.cache
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.0\media_backup.shared.AssemblyInfo.cs
