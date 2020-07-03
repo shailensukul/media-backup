@@ -25,9 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ImageHelper.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
+    <ProjectReference Include="..\media-backup.filesystemprocessor\media-backup.filesystemprocessor.csproj" />
+    <ProjectReference Include="..\media_backup.shared\media_backup.shared.csproj" />
   </ItemGroup>
 
 </Project>

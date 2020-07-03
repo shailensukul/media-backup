@@ -11,10 +11,11 @@ namespace Sukul.Media.Backup
     using System.IO;
     using System.Reflection;
     using CommandLine;
+    using Sukul.Media.Backup.Shared;
 
     class Program
     {
-        static IMediaProcessor processor = new FileSystemProcessor();
+        private static readonly IMediaProcessor processor = new FileSystemProcessor.FileSystemProcessor();
 
         static void Main(string[] args)
         {
