@@ -27,3 +27,4 @@ dotnet media-backup.dll -s C:\temp\Pictures -d D:\Temp\Copytest -i true -v false
 
 * Add an option to strip identifying metadata from media fiels
 * Add an option to de-duplicate files based on unique hashcode generated from the file contents (minus metadata)
+* Use multithreaded file processing
