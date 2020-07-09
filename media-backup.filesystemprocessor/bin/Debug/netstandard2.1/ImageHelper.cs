@@ -21,5 +21,11 @@ namespace Sukul.Media.Backup.Shared
             }
             return tags;
         }
+
+        public static void RemoveEXIFData(ref byte[] data)
+        {
+            var info = Image.Identify(new MemoryStream(data));
+            info.Metadata.ExifProfile = null;
+        }
     }
 }

@@ -48,6 +48,8 @@ namespace Sukul.Media.Backup.FileSystemProcessor
                 Directory.CreateDirectory(path);
             }
 
+            ImageHelper.RemoveEXIFData(ref fileData);
+
             // string destinationFileName = this.GetHash(fileData);
             string destinationFileName = Path.GetRandomFileName();
 
