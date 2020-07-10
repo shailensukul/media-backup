@@ -11,6 +11,8 @@ namespace Sukul.Media.Backup.FileSystemProcessor
 
     public class FileSystemProcessor : IMediaProcessor
     {
+        List<string> ProcessedFileHashes = new List<string>();
+
         public async Task<bool> Exists(string path, byte[] fileData)
         {
             if (Directory.Exists(path))
@@ -43,21 +45,28 @@ namespace Sukul.Media.Backup.FileSystemProcessor
 
         public async Task Save(string path, byte[] fileData, string extension)
         {
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
 
-            ImageHelper.RemoveEXIFData(ref fileData);
+            // ImageHelper.RemoveEXIFData(ref fileData);
 
             // string destinationFileName = this.GetHash(fileData);
             string destinationFileName = Path.GetRandomFileName();
 
             destinationFileName = Path.ChangeExtension(destinationFileName, extension);
 
-            if (!await this.Exists(path, fileData))
+            var fileHash = GetHash(fileData);
+
+            if (!ProcessedFileHashes.Contains(fileHash))
             {
-                await File.WriteAllBytesAsync($"{path}\\{destinationFileName}", fileData);
+                if (!await this.Exists(path, fileData))
+                {
+                    await File.WriteAllBytesAsync($"{path}\\{destinationFileName}", fileData);
+                    ProcessedFileHashes.Add(fileHash);
+                }
             }
             return;
         }

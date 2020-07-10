@@ -21,11 +21,18 @@ namespace Sukul.Media.Backup
         public bool Images { get; set; }
 
         [Option(
-          'v', 
+          'v',
           "video",
           Default = false,
           HelpText = "Copy all types of video files.")]
         public bool Videos { get; set; }
+
+      [Option(
+        'r',
+        "releteaftercopy",
+        Default = false,
+        HelpText = "Delete files after copying.")]
+        public bool DeleteAfterCopy { get; set; }
 
     }
 }

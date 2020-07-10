@@ -36,17 +36,18 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"Destination: {opts.DestinationPath}");
             Trace.WriteLine($"Copy images: {opts.Images}");
             Trace.WriteLine($"Copy videos: {opts.Videos}");
+            Trace.WriteLine($"Remove files after copying: {opts.DeleteAfterCopy}");
 
             var files = await processor.List(opts.SourcePath, true, opts.Images, opts.Videos);
             foreach (var file in files)
             {
-                Copy(file, opts.DestinationPath);
+                Copy(file, opts.DestinationPath, opts.DeleteAfterCopy);
                 Trace.WriteLine($"{file}");
             }
             Console.ReadLine();
         }
 
-        static void Copy(string filename, string topDestinationFolder)
+        static void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy)
         {
             DateTime dateTime = default(DateTime);
             byte[] data = File.ReadAllBytes(filename);
@@ -69,6 +70,10 @@ namespace Sukul.Media.Backup
             }
             desinationFolder= $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
             processor.Save(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
+            if (deleteAfterCopy)
+            {
+                File.Delete(filename);
+            }
 
         }
 
