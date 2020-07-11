@@ -4,6 +4,7 @@ namespace Sukul.Media.Backup.FileSystemProcessor
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Security.Cryptography;
@@ -59,14 +60,20 @@ namespace Sukul.Media.Backup.FileSystemProcessor
             destinationFileName = Path.ChangeExtension(destinationFileName, extension);
 
             var fileHash = GetHash(fileData);
-
+            var fileName = $"{path}\\{destinationFileName}";
             if (!ProcessedFileHashes.Contains(fileHash))
             {
                 if (!await this.Exists(path, fileData))
                 {
-                    await File.WriteAllBytesAsync($"{path}\\{destinationFileName}", fileData);
+                    await File.WriteAllBytesAsync(fileName, fileData);
                     ProcessedFileHashes.Add(fileHash);
+                } else
+                {
+                    Trace.WriteLine($"File {fileName} already exists. Skipping ..");
                 }
+            } else
+            {
+                Trace.WriteLine($"Duplicate file found {fileName}. Skipping ...");
             }
             return;
         }
