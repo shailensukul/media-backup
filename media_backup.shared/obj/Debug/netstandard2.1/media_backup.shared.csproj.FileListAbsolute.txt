@@ -1,9 +1,9 @@
 D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\ImageHelper.cs
-D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\media_backup.shared.deps.json
-D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\media_backup.shared.dll
-D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\media_backup.shared.pdb
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.AssemblyInfoInputs.cache
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.AssemblyInfo.cs
-D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.dll
-D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.pdb
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.deps.json
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.dll
+D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.pdb
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\Sukul.Media.Backup.Shared.dll
+D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\Sukul.Media.Backup.Shared.pdb
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.csprojAssemblyReference.cache

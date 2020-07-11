@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
-        "projectName": "media_backup.shared",
+        "projectName": "Sukul.Media.Backup.Shared",
         "projectPath": "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
         "packagesPath": "C:\\Users\\shail\\.nuget\\packages\\",
         "outputPath": "D:\\Code\\media-backup\\media_backup.shared\\obj\\",

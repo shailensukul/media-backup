@@ -15,8 +15,8 @@ namespace Sukul.Media.Backup
 
     class Program
     {
-        private static readonly IMediaProcessor processor = new FileSystemProcessor.FileSystemProcessor();
 
+        static Sukul.Media.Backup.Shared.Main _main = new Main(new FileSystemProcessor.FileSystemProcessor());
         static void Main(string[] args)
         {
             Trace.Listeners.Add(new ConsoleTraceListener(true));
@@ -38,43 +38,10 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"Copy videos: {opts.Videos}");
             Trace.WriteLine($"Remove files after copying: {opts.DeleteAfterCopy}");
 
-            var files = await processor.List(opts.SourcePath, true, opts.Images, opts.Videos);
-            foreach (var file in files)
-            {
-                Copy(file, opts.DestinationPath, opts.DeleteAfterCopy);
-                Trace.WriteLine($"{file}");
-            }
+            _main.Process(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy);
+
+            Console.WriteLine("Finished. Press ENTER to exit");
             Console.ReadLine();
-        }
-
-        static void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy)
-        {
-            DateTime dateTime = default(DateTime);
-            byte[] data = File.ReadAllBytes(filename);
-            var tags = ImageHelper.EXIFData(data);
-            object date;
-            string desinationFolder;
-            if (tags.TryGetValue("DateTime", out date))
-            {
-                if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
-                CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
-                {
-                    {
-                        desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-                    }
-                }
-            }
-            if (dateTime == default(DateTime))
-            {
-                dateTime = File.GetCreationTime(filename);
-            }
-            desinationFolder= $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-            processor.Save(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
-            if (deleteAfterCopy)
-            {
-                File.Delete(filename);
-            }
-
         }
 
         static void HandleParseError(IEnumerable<Error> errs)

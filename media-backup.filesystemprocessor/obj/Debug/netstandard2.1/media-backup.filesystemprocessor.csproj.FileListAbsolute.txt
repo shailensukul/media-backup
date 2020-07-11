@@ -2,11 +2,11 @@ D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\I
 D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\media-backup.filesystemprocessor.deps.json
 D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\media-backup.filesystemprocessor.dll
 D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\media-backup.filesystemprocessor.pdb
-D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\media_backup.shared.dll
-D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\media_backup.shared.pdb
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.csprojAssemblyReference.cache
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.AssemblyInfoInputs.cache
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.AssemblyInfo.cs
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.csproj.CopyComplete
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.dll
 D:\Code\media-backup\media-backup.filesystemprocessor\obj\Debug\netstandard2.1\media-backup.filesystemprocessor.pdb
+D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.dll
+D:\Code\media-backup\media-backup.filesystemprocessor\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.pdb

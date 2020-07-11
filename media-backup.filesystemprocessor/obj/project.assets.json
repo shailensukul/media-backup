@@ -78,17 +78,17 @@
           "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
       },
-      "media_backup.shared/1.0.0": {
+      "Sukul.Media.Backup.Shared/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
         "dependencies": {
           "SixLabors.ImageSharp": "1.0.0-beta0007"
         },
         "compile": {
-          "bin/placeholder/media_backup.shared.dll": {}
+          "bin/placeholder/Sukul.Media.Backup.Shared.dll": {}
         },
         "runtime": {
-          "bin/placeholder/media_backup.shared.dll": {}
+          "bin/placeholder/Sukul.Media.Backup.Shared.dll": {}
         }
       }
     }
@@ -454,7 +454,7 @@
         "version.txt"
       ]
     },
-    "media_backup.shared/1.0.0": {
+    "Sukul.Media.Backup.Shared/1.0.0": {
       "type": "project",
       "path": "../media_backup.shared/media_backup.shared.csproj",
       "msbuildProject": "../media_backup.shared/media_backup.shared.csproj"
@@ -462,7 +462,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.1": [
-      "media_backup.shared >= 1.0.0"
+      "Sukul.Media.Backup.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {

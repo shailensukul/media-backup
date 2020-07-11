@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>Sukul.Media.Backup.Shared</AssemblyName>
+    <RootNamespace>Sukul.Media.Backup.Shared</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

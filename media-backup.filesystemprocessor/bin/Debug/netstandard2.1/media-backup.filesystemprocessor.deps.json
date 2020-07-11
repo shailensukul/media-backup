@@ -9,7 +9,7 @@
     ".NETStandard,Version=v2.1/": {
       "media-backup.filesystemprocessor/1.0.0": {
         "dependencies": {
-          "media_backup.shared": "1.0.0"
+          "Sukul.Media.Backup.Shared": "1.0.0"
         },
         "runtime": {
           "media-backup.filesystemprocessor.dll": {}
@@ -80,12 +80,12 @@
           }
         }
       },
-      "media_backup.shared/1.0.0": {
+      "Sukul.Media.Backup.Shared/1.0.0": {
         "dependencies": {
           "SixLabors.ImageSharp": "1.0.0-beta0007"
         },
         "runtime": {
-          "media_backup.shared.dll": {}
+          "Sukul.Media.Backup.Shared.dll": {}
         }
       }
     }
@@ -145,7 +145,7 @@
       "path": "system.runtime.compilerservices.unsafe/4.5.1",
       "hashPath": "system.runtime.compilerservices.unsafe.4.5.1.nupkg.sha512"
     },
-    "media_backup.shared/1.0.0": {
+    "Sukul.Media.Backup.Shared/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
