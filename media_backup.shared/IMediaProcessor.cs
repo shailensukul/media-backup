@@ -6,8 +6,8 @@ namespace Sukul.Media.Backup.Shared
 
     public interface IMediaProcessor {
 
-        public Task<bool> Exists(string path, byte[] fileData);
+        Task<bool> Exists(string path, byte[] fileData);
         public Task Save(string path, byte[] fileData, string extension);
-        public Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos);
+        public void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy);
     }
 }

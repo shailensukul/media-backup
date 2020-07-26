@@ -11,12 +11,19 @@ namespace Sukul.Media.Backup
     using System.IO;
     using System.Reflection;
     using CommandLine;
+    using Sukul.Media.Backup.FileSystem;
     using Sukul.Media.Backup.Shared;
 
     class Program
     {
 
-        static Sukul.Media.Backup.Shared.Main _main = new Main(new FileSystemProcessor.FileSystemProcessor());
+        static Sukul.Media.Backup.Shared.Main _main = new Main(
+            Discovery,
+            Processor);
+
+        public static IMediaProcessor Processor { get; } = new FileSystemProcessor();
+        private static IMediaDiscovery Discovery { get; } = new FileSystemDiscovery(Processor);
+
         static void Main(string[] args)
         {
             Trace.Listeners.Add(new ConsoleTraceListener(true));

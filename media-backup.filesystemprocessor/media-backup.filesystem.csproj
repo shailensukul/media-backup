@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>media_backup.filesystemprocessor</RootNamespace>
+    <RootNamespace>Sukul.Media.Backup.FileSystem</RootNamespace>
+    <AssemblyName>media_backup.filesystem</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

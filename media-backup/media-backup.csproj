@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Sukul.Media.Backup</RootNamespace>
+    <RepositoryUrl>https://github.com/shailensukul/media-backup</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\media-backup.filesystemprocessor\media-backup.filesystemprocessor.csproj" />
+    <ProjectReference Include="..\media-backup.filesystemprocessor\media-backup.filesystem.csproj" />
     <ProjectReference Include="..\media_backup.shared\media_backup.shared.csproj" />
   </ItemGroup>
 

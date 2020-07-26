@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "media-backup", "media-backup\media-backup.csproj", "{AF3AF0B6-A5F4-4566-A134-D0D9EB0A3A00}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "media-backup.filesystemprocessor", "media-backup.filesystemprocessor\media-backup.filesystemprocessor.csproj", "{D5EC09D8-9C06-46F8-A0AF-E7FFDDB02644}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "media-backup.filesystem", "media-backup.filesystemprocessor\media-backup.filesystem.csproj", "{D5EC09D8-9C06-46F8-A0AF-E7FFDDB02644}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "media_backup.shared", "media_backup.shared\media_backup.shared.csproj", "{9286629B-0C96-44EA-A945-14F4494C21AD}"
 EndProject

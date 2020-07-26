@@ -472,9 +472,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystemprocessor.csproj",
-      "projectName": "media-backup.filesystemprocessor",
-      "projectPath": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystemprocessor.csproj",
+      "projectUniqueName": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
+      "projectName": "media_backup.filesystem",
+      "projectPath": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
       "packagesPath": "C:\\Users\\shail\\.nuget\\packages\\",
       "outputPath": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\obj\\",
       "projectStyle": "PackageReference",
