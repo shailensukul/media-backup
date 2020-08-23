@@ -11,7 +11,7 @@
 
     public sealed class FileSystemSource : IMediaDiscovery
     {
-        public async Task<IList<string>> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos)
+        public async IAsyncEnumerable<SourceMedia> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos)
         {
             SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             Collection<string> filters = new Collection<string>();
@@ -32,9 +32,12 @@
 
             if (Directory.Exists(path))
             {
-                return Directory.EnumerateFiles(path, "*.*", option)
+                foreach (var file in Directory.EnumerateFiles(path, "*.*", option)
                     .Where(f => filters.Any(f.ToLower().EndsWith))
-                    .ToList();
+                    .ToList())
+                {
+                    yield return new SourceMedia(File.ReadAllBytes(file), Path.GetExtension(file));
+                }
             }
             throw new ApplicationException($"Path {path} does not exist");
         }

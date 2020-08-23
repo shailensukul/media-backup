@@ -80,37 +80,6 @@ namespace Sukul.Media.Backup.FileSystem
             return false;
         }
 
-        public async void CopyAsync(string filename, string topDestinationFolder, bool deleteAfterCopy)
-        {
-            DateTime dateTime = default(DateTime);
-            byte[] data = File.ReadAllBytes(filename);
-            var tags = ImageHelper.EXIFData(data);
-            object date;
-            string desinationFolder;
-            if (tags.TryGetValue("DateTime", out date))
-            {
-                if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
-                CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
-                {
-                    {
-                        desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-                    }
-                }
-            }
-            if (dateTime == default(DateTime))
-            {
-                dateTime = File.GetCreationTime(filename);
-            }
-            desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-
-            Trace.WriteLine($"{filename}");
-            await this.SaveAsync(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
-            if (deleteAfterCopy)
-            {
-                File.Delete(filename);
-            }
-        }
-
         private async Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos)
         {
             SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
