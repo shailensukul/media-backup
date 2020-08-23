@@ -12,7 +12,7 @@ namespace media_backup.tests
         {}
         public override IEnumerable<byte[]> Givens()
         {
-            yield return new byte[];
+            yield return new byte[] { };
         }
 
         public override void When()

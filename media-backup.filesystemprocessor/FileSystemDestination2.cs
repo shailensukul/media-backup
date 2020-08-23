@@ -12,41 +12,13 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public sealed class FileSystemDiscovery : MediaDiscovery
+    public sealed class FileSystemDestination2 : IMediaDestination
     {
-        private readonly IMediaProcessor _mediaProcessor;
+        private readonly IMediaDestination _mediaProcessor;
 
 
-        public FileSystemDiscovery(IMediaProcessor mediaProcessor) : base(mediaProcessor)
+        public FileSystemDestination2(IMediaDestination mediaProcessor)
         {}
-
-        public override async Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos)
-        {
-            SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
-            Collection<string> filters = new Collection<string>();
-            if (searchImages)
-            {
-                filters.Add(".jpg");
-                filters.Add(".jpeg");
-                filters.Add(".png");
-                filters.Add(".gif");
-            }
-
-            if (searchVideos)
-            {
-                filters.Add(".mp4");
-                filters.Add(".avi");
-            }
-
-
-            if (Directory.Exists(path))
-            {
-                return Directory.EnumerateFiles(path, "*.*", option)
-                    .Where(f => filters.Any(f.ToLower().EndsWith))
-                    .ToList();
-            }
-            throw new ApplicationException($"Path {path} does not exist");
-        }
 
 
         public override void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy)
@@ -73,7 +45,7 @@
             desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
 
             Trace.WriteLine($"{filename}");
-            _mediaProcessor.Save(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
+            _mediaProcessor.SaveAsync(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
             if (deleteAfterCopy)
             {
                 File.Delete(filename);

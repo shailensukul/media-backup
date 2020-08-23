@@ -7,7 +7,7 @@
 
     public interface IMediaDiscovery
     {
-        void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy);
-        Task<IList<string>> List(string path, bool recursive, bool searchImages, bool searchVideos);
+        //void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy);
+        Task<IList<string>> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos);
     }
 }

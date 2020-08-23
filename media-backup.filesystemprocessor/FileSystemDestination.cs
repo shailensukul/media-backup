@@ -11,10 +11,10 @@ namespace Sukul.Media.Backup.FileSystem
     using System.Security.Cryptography;
     using System.Threading.Tasks;
 
-    public class FileSystemProcessor : IMediaProcessor
+    public class FileSystemDestination : IMediaDestination
     {
         List<string> ProcessedFileHashes = new List<string>();
-        public FileSystemProcessor()
+        public FileSystemDestination()
         {}
 
         private string GetHash(byte[] fileData)
@@ -25,7 +25,7 @@ namespace Sukul.Media.Backup.FileSystem
             }
         }
 
-        public async Task Save(string path, byte[] fileData, string extension)
+        public async Task SaveAsync(string path, byte[] fileData, string extension)
         {
             if (!Directory.Exists(path))
             {
@@ -43,7 +43,7 @@ namespace Sukul.Media.Backup.FileSystem
             var fileName = $"{path}\\{destinationFileName}";
             if (!ProcessedFileHashes.Contains(fileHash))
             {
-                if (!await this.Exists(path, fileData))
+                if (!await this.ExistsAsync(path, fileData))
                 {
                     await File.WriteAllBytesAsync(fileName, fileData);
                     ProcessedFileHashes.Add(fileHash);
@@ -58,7 +58,7 @@ namespace Sukul.Media.Backup.FileSystem
             return;
         }
 
-        public async Task<bool> Exists(string path, byte[] fileData)
+        public async Task<bool> ExistsAsync(string path, byte[] fileData)
         {
             if (Directory.Exists(path))
             {
@@ -80,7 +80,7 @@ namespace Sukul.Media.Backup.FileSystem
             return false;
         }
 
-        public async void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy)
+        public async void CopyAsync(string filename, string topDestinationFolder, bool deleteAfterCopy)
         {
             DateTime dateTime = default(DateTime);
             byte[] data = File.ReadAllBytes(filename);
@@ -104,7 +104,7 @@ namespace Sukul.Media.Backup.FileSystem
             desinationFolder = $"{topDestinationFolder}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
 
             Trace.WriteLine($"{filename}");
-            await this.Save(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
+            await this.SaveAsync(desinationFolder, File.ReadAllBytes(filename), Path.GetExtension(filename));
             if (deleteAfterCopy)
             {
                 File.Delete(filename);

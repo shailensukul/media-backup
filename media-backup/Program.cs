@@ -21,8 +21,8 @@ namespace Sukul.Media.Backup
             Discovery,
             Processor);
 
-        public static IMediaProcessor Processor { get; } = new FileSystemProcessor();
-        private static IMediaDiscovery Discovery { get; } = new FileSystemDiscovery(Processor);
+        public static IMediaDestination Processor { get; } = new FileSystemDestination();
+        private static IMediaDiscovery Discovery { get; } = new FileSystemDestination2(Processor);
 
         static void Main(string[] args)
         {
