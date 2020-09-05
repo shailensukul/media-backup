@@ -63,6 +63,7 @@ namespace Sukul.Media.Backup.Shared
                         desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
                         Trace.WriteLine($"Copying file t0  {desinationFolder}");
                         this._destination.SaveAsync(desinationFolder, media.Data, media.Extension);
+                        _source.Delete(media);
                         cancellation.ThrowIfCancellationRequested();
                     }));
 

@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Data;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -11,6 +12,10 @@
 
     public sealed class FileSystemSource : IMediaDiscovery
     {
+        public async void Delete(SourceMedia media)
+        {
+            File.Delete(media.Reference);
+        }
         public async IAsyncEnumerable<SourceMedia> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos)
         {
             SearchOption option = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
@@ -36,7 +41,7 @@
                     .Where(f => filters.Any(f.ToLower().EndsWith))
                     .ToList())
                 {
-                    yield return new SourceMedia(File.ReadAllBytes(file), Path.GetExtension(file), File.GetCreationTime(file));
+                    yield return new SourceMedia(File.ReadAllBytes(file), Path.GetExtension(file), File.GetCreationTime(file), file);
                 }
             }
             else

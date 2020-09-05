@@ -7,7 +7,8 @@
 
     public interface IMediaDiscovery
     {
-        //void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy);
         public IAsyncEnumerable<SourceMedia> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos);
+
+        public void Delete(SourceMedia media);
     }
 }

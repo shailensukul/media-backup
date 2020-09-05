@@ -7,6 +7,12 @@
 
     public sealed class SourceMedia
     {
+        public string Reference
+        {
+            get;
+            set;
+        }
+
         public string Extension
         {
             get;
@@ -28,11 +34,12 @@
         private SourceMedia()
         {}
 
-        public SourceMedia(byte[] mediaData, string extension, DateTime creationDatetime)
+        public SourceMedia(byte[] mediaData, string extension, DateTime creationDatetime, string reference)
         {
             this.Data = mediaData;
             this.Extension = extension;
             this.CreationDateTime = creationDatetime;
+            this.Reference = reference;
         }
     }
 }
