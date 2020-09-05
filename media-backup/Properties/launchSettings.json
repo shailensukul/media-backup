@@ -2,7 +2,7 @@
   "profiles": {
     "media-backup": {
       "commandName": "Project",
-      "commandLineArgs": "-s D:\\Temp\\CopySource -d D:\\Temp\\Copytest -i true -v false -r true"
+      "commandLineArgs": "-s D:\\Temp\\Source -d D:\\Temp\\Destination -i true -v false -r true"
     }
   }
 }

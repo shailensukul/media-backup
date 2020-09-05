@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Text;
 
     public sealed class SourceMedia
@@ -18,13 +19,20 @@
             private set;
         }
 
+        public DateTime CreationDateTime
+        {
+            get;
+            set;
+        }
+
         private SourceMedia()
         {}
 
-        public SourceMedia(byte[] mediaData, string extension)
+        public SourceMedia(byte[] mediaData, string extension, DateTime creationDatetime)
         {
-            this.Data = Data;
+            this.Data = mediaData;
             this.Extension = extension;
+            this.CreationDateTime = creationDatetime;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +18,6 @@ namespace Sukul.Media.Backup.Shared
         private readonly S _source;
         private readonly D _destination;
 
-        private readonly List<byte[]> _filesToProcess;
         private readonly ICollection<Task> _tasks;
         private bool _processing = false;
 
@@ -37,11 +37,32 @@ namespace Sukul.Media.Backup.Shared
                     throw new ApplicationException("A copy operation is currently in progress. Please wait for processing to finish and try again");
                 }
 
-                await foreach (var file in _source.AcquireAsync(sourcePath, true, processImages, processVideos))
+                await foreach (var media in _source.AcquireAsync(sourcePath, true, processImages, processVideos))
                 {
                     this._tasks.Add(Task.Factory.StartNew(() =>
                     {
-                        this._destination.SaveAsync(destinationPath, file.Data, file.Extension);
+                        DateTime dateTime = default(DateTime);
+                        var tags = ImageHelper.EXIFData(media.Data);
+                        object date;
+                        string desinationFolder;
+                        if (tags.TryGetValue("DateTime", out date))
+                        {
+                            if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
+                            CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
+                            {
+                                {
+                                    desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                                }
+                            }
+                        }
+
+                        if (dateTime == default(DateTime))
+                        {
+                            dateTime = media.CreationDateTime;
+                        }
+                        desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                        Trace.WriteLine($"Copying file t0  {desinationFolder}");
+                        this._destination.SaveAsync(desinationFolder, media.Data, media.Extension);
                         cancellation.ThrowIfCancellationRequested();
                     }));
 

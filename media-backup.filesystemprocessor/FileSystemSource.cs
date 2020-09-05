@@ -36,10 +36,13 @@
                     .Where(f => filters.Any(f.ToLower().EndsWith))
                     .ToList())
                 {
-                    yield return new SourceMedia(File.ReadAllBytes(file), Path.GetExtension(file));
+                    yield return new SourceMedia(File.ReadAllBytes(file), Path.GetExtension(file), File.GetCreationTime(file));
                 }
             }
-            throw new ApplicationException($"Path {path} does not exist");
+            else
+            {
+                throw new ApplicationException($"Path {path} does not exist");
+            }
         }
     }
 }

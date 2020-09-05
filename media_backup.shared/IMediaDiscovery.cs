@@ -8,6 +8,6 @@
     public interface IMediaDiscovery
     {
         //void Copy(string filename, string topDestinationFolder, bool deleteAfterCopy);
-        IAsyncEnumerable<SourceMedia> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos);
+        public IAsyncEnumerable<SourceMedia> AcquireAsync(string path, bool recursive, bool searchImages, bool searchVideos);
     }
 }

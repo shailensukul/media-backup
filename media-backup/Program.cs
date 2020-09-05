@@ -17,12 +17,8 @@ namespace Sukul.Media.Backup
     class Program
     {
 
-        static Sukul.Media.Backup.Shared.Main _main = new Main(
-            Discovery,
-            Processor);
+        static Coordinator<IMediaDiscovery, IMediaDestination> _coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(new FileSystemSource(), new FileSystemDestination());
 
-        public static IMediaDestination Processor { get; } = new FileSystemDestination();
-        private static IMediaDiscovery Discovery { get; } = new FileSystemDestination2(Processor);
 
         static void Main(string[] args)
         {
@@ -45,7 +41,7 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"Copy videos: {opts.Videos}");
             Trace.WriteLine($"Remove files after copying: {opts.DeleteAfterCopy}");
 
-            _main.Process(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy);
+            _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, new System.Threading.CancellationToken());
 
             Console.WriteLine("Finished. Press ENTER to exit");
             Console.ReadLine();
