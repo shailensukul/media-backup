@@ -15,7 +15,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="destination-files\" />
     <Folder Include="source-files\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\media-backup.filesystemprocessor\media-backup.filesystem.csproj" />
+    <ProjectReference Include="..\media_backup.shared\media_backup.shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="source-files\20200315_183218.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="source-files\20200520_102417.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="source-files\20200520_102422.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="source-files\20200520_102429.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="source-files\220px-SNice.svg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

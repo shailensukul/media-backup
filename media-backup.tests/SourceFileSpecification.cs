@@ -1,21 +1,33 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sukul.Media.Backup.FileSystem;
+using Sukul.Media.Backup.Shared;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 
 namespace media_backup.tests
 {
     [TestClass]
-    public abstract class SourceFileSpecification<T>
+    public abstract class SourceFileSpecification
     {
-        public void GiveSourceFile()
+        protected IMediaDiscovery _discovery;
+        protected IMediaDestination _destination;
+        protected Coordinator<IMediaDiscovery, IMediaDestination> _coordinator;
+
+        public SourceFileSpecification()
         {
-            this.Givens();
         }
 
-        public abstract IEnumerable<T> Givens();
+        public abstract void Given();
+
+        public abstract void When();
 
         [TestInitialize]
-        public abstract void When();
+        public void Run()
+        {
+            this.Given();
+            this.When();
+        }
 
     }
 }

@@ -1,23 +1,53 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sukul.Media.Backup.FileSystem;
+using Sukul.Media.Backup.Shared;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace media_backup.tests
 {
     [TestClass]
-    public class FilesAreCopiedWithoutDuplicates : SourceFileSpecification<byte[]>
+    public class FilesAreCopiedWithoutDuplicates : SourceFileSpecification
     {
+        string currentDir = Directory.GetCurrentDirectory();
+        string inputDir;
+        string outDir;
+
         public FilesAreCopiedWithoutDuplicates() 
-        {}
-        public override IEnumerable<byte[]> Givens()
         {
-            yield return new byte[] { };
+            this.inputDir = $"{currentDir}\\source-files";
+            this.outDir = $"{currentDir}\\destination-files";
+        }
+
+        public override void  Given()
+        {
+            Directory.CreateDirectory(this.outDir);
+            this._discovery = new FileSystemSource();
+            this._destination = new FileSystemDestination();
+            this._coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(_discovery, _destination);
         }
 
         public override void When()
         {
-            throw new NotImplementedException();
+            _coordinator.ProcessAsync(inputDir, outDir, true, true, true, CancellationToken.None);
+        }
+
+        [TestMethod]
+        public void EnsureFilesAreCopied()
+        {
+            Assert.AreEqual(Directory.GetFiles(outDir, "*", SearchOption.AllDirectories).Count(), 5, "Expected files to be copied");
+        }
+        
+        [TestCleanup]
+        public void CleanUp()
+        {
+            Directory.Delete(outDir, true);
         }
     }
 }
