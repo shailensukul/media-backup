@@ -3,6 +3,7 @@ using Sukul.Media.Backup.FileSystem;
 using Sukul.Media.Backup.Shared;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -15,6 +16,8 @@ namespace media_backup.tests
     [TestClass]
     public class FilesAreCopiedWithoutDuplicates : SourceFileSpecification
     {
+        DateTime start;
+
         string currentDir = Directory.GetCurrentDirectory();
         string inputDir;
         string outDir;
@@ -35,6 +38,7 @@ namespace media_backup.tests
 
         public override void When()
         {
+            start = DateTime.Now;
             _coordinator.ProcessAsync(inputDir, outDir, true, true, true, CancellationToken.None);
         }
 
@@ -42,6 +46,8 @@ namespace media_backup.tests
         public void EnsureFilesAreCopied()
         {
             Assert.AreEqual(Directory.GetFiles(outDir, "*", SearchOption.AllDirectories).Count(), 5, "Expected files to be copied");
+            var timeTaken = DateTime.Now.Subtract(start);
+            Trace.Write($"Copy took {timeTaken.TotalMilliseconds} milliseconds");
         }
         
         [TestCleanup]
