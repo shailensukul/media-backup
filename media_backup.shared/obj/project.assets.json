@@ -448,24 +448,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\shail\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\SHAILEN\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
+      "projectUniqueName": "D:\\code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
       "projectName": "Sukul.Media.Backup.Shared",
-      "projectPath": "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
-      "packagesPath": "C:\\Users\\shail\\.nuget\\packages\\",
-      "outputPath": "D:\\Code\\media-backup\\media_backup.shared\\obj\\",
+      "projectPath": "D:\\code\\media-backup\\media_backup.shared\\media_backup.shared.csproj",
+      "packagesPath": "C:\\Users\\SHAILEN\\.nuget\\packages\\",
+      "outputPath": "D:\\code\\media-backup\\media_backup.shared\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\shail\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\SHAILEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.1"
@@ -508,7 +509,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

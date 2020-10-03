@@ -466,24 +466,25 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\shail\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\SHAILEN\\.nuget\\packages\\": {},
+    "C:\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
+      "projectUniqueName": "D:\\code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
       "projectName": "media_backup.filesystem",
-      "projectPath": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
-      "packagesPath": "C:\\Users\\shail\\.nuget\\packages\\",
-      "outputPath": "D:\\Code\\media-backup\\media-backup.filesystemprocessor\\obj\\",
+      "projectPath": "D:\\code\\media-backup\\media-backup.filesystemprocessor\\media-backup.filesystem.csproj",
+      "packagesPath": "C:\\Users\\SHAILEN\\.nuget\\packages\\",
+      "outputPath": "D:\\code\\media-backup\\media-backup.filesystemprocessor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\shail\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\SHAILEN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.1"
@@ -495,8 +496,8 @@
       "frameworks": {
         "netstandard2.1": {
           "projectReferences": {
-            "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj": {
-              "projectPath": "D:\\Code\\media-backup\\media_backup.shared\\media_backup.shared.csproj"
+            "D:\\code\\media-backup\\media_backup.shared\\media_backup.shared.csproj": {
+              "projectPath": "D:\\code\\media-backup\\media_backup.shared\\media_backup.shared.csproj"
             }
           }
         }
@@ -524,7 +525,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }

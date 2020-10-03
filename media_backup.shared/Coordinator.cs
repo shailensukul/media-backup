@@ -39,13 +39,13 @@ namespace Sukul.Media.Backup.Shared
 
                 await foreach (var media in _source.AcquireAsync(sourcePath, true, processImages, processVideos))
                 {
-                    this._tasks.Add(Task.Factory.StartNew(() =>
+                    this._tasks.Add(Task.Factory.StartNew(async () =>
                     {
                         DateTime dateTime = default(DateTime);
                         var tags = ImageHelper.EXIFData(media.Data);
                         object date;
                         string desinationFolder;
-                        if (tags.TryGetValue("DateTime", out date))
+                        if (tags != null && tags.TryGetValue("DateTime", out date))
                         {
                             if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
                             CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
@@ -62,8 +62,15 @@ namespace Sukul.Media.Backup.Shared
                         }
                         desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
                         Trace.WriteLine($"Copying file t0  {desinationFolder}");
-                        this._destination.SaveAsync(desinationFolder, media.Data, media.Extension);
-                        _source.Delete(media);
+                        await this._destination.SaveAsync(desinationFolder, media.Data, media.Extension);
+                        try
+                        {
+                            _source.Delete(media);
+                        }
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine($"Unable to delete {media}. Please remove manually.");
+                        }
                         cancellation.ThrowIfCancellationRequested();
                     }));
 

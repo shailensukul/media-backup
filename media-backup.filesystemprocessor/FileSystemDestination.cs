@@ -13,7 +13,7 @@ namespace Sukul.Media.Backup.FileSystem
 
     public class FileSystemDestination : IMediaDestination
     {
-        List<string> ProcessedFileHashes = new List<string>();
+        static List<string> ProcessedFileHashes = new List<string>();
         public FileSystemDestination()
         {}
 
