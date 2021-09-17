@@ -338,3 +338,18 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/media_backup.shared/obj/Debug/netstandard2.1/media_backup.shared.assets.cache
+/media_backup.shared/obj/Debug/netstandard2.1/media_backup.shared.csprojAssemblyReference.cache
+/media_backup.shared/obj/media_backup.shared.csproj.nuget.dgspec.json
+/media_backup.shared/obj/media_backup.shared.csproj.nuget.g.props
+/media_backup.shared/obj/project.assets.json
+/media_backup.shared/obj/Debug/netstandard2.1/media_backup.shared.assets.cache
+/media_backup.shared/obj/Debug/netstandard2.1/media_backup.shared.csprojAssemblyReference.cache
+/media_backup.shared/obj/media_backup.shared.csproj.nuget.dgspec.json
+/media_backup.shared/obj/media_backup.shared.csproj.nuget.g.props
+/media_backup.shared/obj/project.assets.json
+/media-backup.filesystemprocessor/obj/project.assets.json
+/.vs/media-backup/v16/.suo
+/media_backup.shared/obj/Debug/netstandard2.1/media_backup.shared.assets.cache
+/media_backup.shared/obj/media_backup.shared.csproj.nuget.g.props
+/media_backup.shared/obj/project.assets.json
