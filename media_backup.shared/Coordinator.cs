@@ -20,7 +20,6 @@ namespace Sukul.Media.Backup.Shared
         private readonly D _destination;
 
         private readonly ICollection<Task> _tasks;
-        private bool _processing = false;
 
         public Coordinator(S source, D destination)
         {
@@ -34,11 +33,6 @@ namespace Sukul.Media.Backup.Shared
         {
             try
             {
-                if (this._processing)
-                {
-                    throw new ApplicationException("A copy operation is currently in progress. Please wait for processing to finish and try again");
-                }
-
                 var options = new ExecutionDataflowBlockOptions
                 {
                     MaxDegreeOfParallelism = 8,
@@ -52,13 +46,11 @@ namespace Sukul.Media.Backup.Shared
 
                 search.Complete();
                 await search.Completion;
-                this._processing = false;
             }
             catch (Exception ex)
             {
-                this._processing = false;
                 Trace.WriteLine(ex.ToString());
-                throw ex;
+                throw;
             }
         }
 
@@ -68,13 +60,27 @@ namespace Sukul.Media.Backup.Shared
             var tags = ImageHelper.EXIFData(media.Data);
             object date;
             string desinationFolder;
-            if (tags != null && tags.TryGetValue("DateTime", out date))
+
+            if (tags != null && tags.TryGetValue("ModifyDate", out date))
             {
                 if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
                 CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
                 {
                     {
                         desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                    }
+                }
+            }
+            else
+            {
+                if (tags != null && tags.TryGetValue("DateTime", out date))
+                {
+                    if (DateTime.TryParseExact(Convert.ToString(date), "yyyy:MM:dd HH:mm:ss",
+                    CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
+                    {
+                        {
+                            desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
+                        }
                     }
                 }
             }

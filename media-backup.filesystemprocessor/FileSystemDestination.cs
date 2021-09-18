@@ -29,7 +29,7 @@ namespace Sukul.Media.Backup.FileSystem
 
         ConcurrentDictionary<string, string> ProcessedFileHashes = new ConcurrentDictionary<string, string>((Environment.ProcessorCount * 2), 101);
         public FileSystemDestination()
-        {}
+        { }
 
         private string GetHash(byte[] fileData)
         {
@@ -56,26 +56,39 @@ namespace Sukul.Media.Backup.FileSystem
             var fileHash = GetHash(fileData);
             var fileName = $"{path}\\{destinationFileName}";
 
-            ProcessedFileHashes.Concat(Directory.GetFiles(path).Where(f => !ProcessedFileHashes.ContainsKey(f)).Select(f => KeyValuePair.Create<string, string> (f, GetHash(File.ReadAllBytes(f)))));
+            ProcessedFileHashes.Concat(Directory.GetFiles(path).Where(f => !ProcessedFileHashes.ContainsKey(f)).Select(f => KeyValuePair.Create<string, string>(f, GetHash(GetFileAsBytes(f)))));
 
             if (!ProcessedFileHashes.Values.Contains(fileHash))
             {
-                if (!await this.ExistsAsync(path, fileData))
-                {
-                    // Does the destination already contain the file?
-
-
-                    await File.WriteAllBytesAsync(fileName, fileData);
-                    ProcessedFileHashes.TryAdd(fileName, fileHash);
-                } else
-                {
-                    Trace.WriteLine($"File {fileName} already exists. Skipping ..");
-                }
-            } else
+                //if (!await this.ExistsAsync(path, fileData))
+                //{
+                // Does the destination already contain the file?
+                await File.WriteAllBytesAsync(fileName, fileData);
+                ProcessedFileHashes.TryAdd(fileName, fileHash);
+                Trace.WriteLine($"Processed file: {fileName}");
+                //}
+                //else
+                //{
+                //    Trace.WriteLine($"File {fileName} already exists. Skipping ..");
+                //}
+            }
+            else
             {
                 Trace.WriteLine($"Duplicate file found {fileName}. Skipping ...");
             }
             return;
+        }
+
+        private byte[] GetFileAsBytes(string filePath)
+        {
+            using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    var binaryReader = new BinaryReader(stream);
+                    return binaryReader.ReadBytes((int)stream.Length);
+                }
+            }
         }
 
         public async Task<bool> ExistsAsync(string path, byte[] fileData)
@@ -89,7 +102,7 @@ namespace Sukul.Media.Backup.FileSystem
 
                     foreach (var file in await this.List(path, false, true, true))
                     {
-                        var existingFileHash = Convert.ToBase64String(sha1.ComputeHash(File.ReadAllBytes(file)));
+                        var existingFileHash = Convert.ToBase64String(sha1.ComputeHash(GetFileAsBytes(file)));
                         if (copyFilehash == existingFileHash)
                         {
                             return true;

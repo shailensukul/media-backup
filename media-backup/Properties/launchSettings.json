@@ -2,7 +2,7 @@
   "profiles": {
     "media-backup": {
       "commandName": "Project",
-      "commandLineArgs": "-s \"F:\\Pictures\" -d \"D:\\OneDrive - SharePoint Cloud Design\\Pictures\" -i true -v true -r true"
+      "commandLineArgs": "-s \"D:\\Temp\\Media-Backup\\Source\" -d \"D:\\Temp\\Media-Backup\\Destination\" -i true -v true -r true"
     }
   }
 }
