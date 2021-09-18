@@ -2,6 +2,7 @@ namespace Sukul.Media.Backup.FileSystem
 {
     using Sukul.Media.Backup.Shared;
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Diagnostics;
@@ -13,7 +14,20 @@ namespace Sukul.Media.Backup.FileSystem
 
     public class FileSystemDestination : IMediaDestination
     {
-        static List<string> ProcessedFileHashes = new List<string>();
+        // The higher the concurrencyLevel, the higher the theoretical number of operations
+        // that could be performed concurrently on the ConcurrentDictionary.  However, global
+        // operations like resizing the dictionary take longer as the concurrencyLevel rises.
+        // For the purposes of this example, we'll compromise at numCores * 2.
+        //int numProcs = Environment.ProcessorCount;
+        //int concurrencyLevel = numProcs * 2;
+
+        // We know how many items we want to insert into the ConcurrentDictionary.
+        // So set the initial capacity to some prime number above that, to ensure that
+        // the ConcurrentDictionary does not need to be resized while initializing it.
+        //int NUMITEMS = 64;
+        //int initialCapacity = 101;
+
+        ConcurrentDictionary<string, string> ProcessedFileHashes = new ConcurrentDictionary<string, string>((Environment.ProcessorCount * 2), 101);
         public FileSystemDestination()
         {}
 
@@ -41,12 +55,18 @@ namespace Sukul.Media.Backup.FileSystem
 
             var fileHash = GetHash(fileData);
             var fileName = $"{path}\\{destinationFileName}";
-            if (!ProcessedFileHashes.Contains(fileHash))
+
+            ProcessedFileHashes.Concat(Directory.GetFiles(path).Where(f => !ProcessedFileHashes.ContainsKey(f)).Select(f => KeyValuePair.Create<string, string> (f, GetHash(File.ReadAllBytes(f)))));
+
+            if (!ProcessedFileHashes.Values.Contains(fileHash))
             {
                 if (!await this.ExistsAsync(path, fileData))
                 {
+                    // Does the destination already contain the file?
+
+
                     await File.WriteAllBytesAsync(fileName, fileData);
-                    ProcessedFileHashes.Add(fileHash);
+                    ProcessedFileHashes.TryAdd(fileName, fileHash);
                 } else
                 {
                     Trace.WriteLine($"File {fileName} already exists. Skipping ..");

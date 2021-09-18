@@ -6,5 +6,5 @@ D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\Sukul.Media.Ba
 D:\Code\media-backup\media_backup.shared\bin\Debug\netstandard2.1\Sukul.Media.Backup.Shared.pdb
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\Sukul.Media.Backup.Shared.dll
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\Sukul.Media.Backup.Shared.pdb
-D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.csprojAssemblyReference.cache
 D:\Code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.csproj.CoreCompileInputs.cache
+D:\code\media-backup\media_backup.shared\obj\Debug\netstandard2.1\media_backup.shared.csproj.AssemblyReference.cache

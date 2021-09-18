@@ -77,6 +77,15 @@
         "runtime": {
           "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll": {}
         }
+      },
+      "System.Threading.Tasks.Dataflow/6.0.0-rc.1.21451.13": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.1/System.Threading.Tasks.Dataflow.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/System.Threading.Tasks.Dataflow.dll": {}
+        }
       }
     }
   },
@@ -440,11 +449,37 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "System.Threading.Tasks.Dataflow/6.0.0-rc.1.21451.13": {
+      "sha512": "GFpmVc8Cr4NKYxBnWqMGY69FYnEwUlGxLhcCHlx8lZVZTXKLThKoPl/wLAuOZW9WIdTBS6TH8yqte0tp2lYahA==",
+      "type": "package",
+      "path": "system.threading.tasks.dataflow/6.0.0-rc.1.21451.13",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/netcoreapp2.0/System.Threading.Tasks.Dataflow.targets",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/net461/System.Threading.Tasks.Dataflow.dll",
+        "lib/net461/System.Threading.Tasks.Dataflow.xml",
+        "lib/net6.0/System.Threading.Tasks.Dataflow.dll",
+        "lib/net6.0/System.Threading.Tasks.Dataflow.xml",
+        "lib/netstandard2.0/System.Threading.Tasks.Dataflow.dll",
+        "lib/netstandard2.0/System.Threading.Tasks.Dataflow.xml",
+        "lib/netstandard2.1/System.Threading.Tasks.Dataflow.dll",
+        "lib/netstandard2.1/System.Threading.Tasks.Dataflow.xml",
+        "system.threading.tasks.dataflow.6.0.0-rc.1.21451.13.nupkg.sha512",
+        "system.threading.tasks.dataflow.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.1": [
-      "SixLabors.ImageSharp >= 1.0.0-beta0007"
+      "SixLabors.ImageSharp >= 1.0.0-beta0007",
+      "System.Threading.Tasks.Dataflow >= 6.0.0-rc.1.21451.13"
     ]
   },
   "packageFolders": {
@@ -497,6 +532,10 @@
           "SixLabors.ImageSharp": {
             "target": "Package",
             "version": "[1.0.0-beta0007, )"
+          },
+          "System.Threading.Tasks.Dataflow": {
+            "target": "Package",
+            "version": "[6.0.0-rc.1.21451.13, )"
           }
         },
         "imports": [
