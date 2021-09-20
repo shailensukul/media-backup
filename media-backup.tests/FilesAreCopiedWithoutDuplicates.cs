@@ -39,7 +39,7 @@ namespace media_backup.tests
         public override void When()
         {
             start = DateTime.Now;
-            _coordinator.ProcessAsync(inputDir, outDir, true, true, true, CancellationToken.None);
+            _coordinator.ProcessAsync(inputDir, outDir, true, true, true, false, CancellationToken.None);
         }
 
         [TestMethod]

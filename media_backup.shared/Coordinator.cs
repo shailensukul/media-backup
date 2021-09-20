@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -23,9 +24,16 @@ namespace Sukul.Media.Backup.Shared
 
         private readonly ICollection<Task> _tasks;
 
+        private enum FileProcessingStatus
+        {
+            Success, Fail
+        }
+
+        private static Collection<(string FullFilename, FileProcessingStatus status, string reason)> FileProcessingResult;
+
         private static Collection<MediaCreatedDateTimeMapping> CreatedDateTimeMappings = new Collection<MediaCreatedDateTimeMapping>()
         {
-            new MediaCreatedDateTimeMapping { DirectoryName="QuickTime Movie Header", Name="Created", DateTimeParseFormat = "ddd MMM dd hh:mm:ss yyyy" },
+            new MediaCreatedDateTimeMapping { DirectoryName="QuickTime Movie Header", Name="Created", DateTimeParseFormat = "ddd MMM dd HH:mm:ss yyyy" },
             new MediaCreatedDateTimeMapping { DirectoryName="Exif IFD0", Name="Date/Time", DateTimeParseFormat = "yyyy:MM:dd HH:mm:ss" }
         };
 
@@ -36,16 +44,18 @@ namespace Sukul.Media.Backup.Shared
             _tasks = new Collection<Task>();
         }
 
-        public async void ProcessAsync(string sourcePath, string destinationPath, bool recursive, bool processImages, bool processVideos,
+        public async void ProcessAsync(string sourcePath, string destinationPath, bool recursive, bool processImages, bool processVideos, bool whatIf,
             CancellationToken cancellation)
         {
             try
             {
+                FileProcessingResult = new Collection<(string FullFilename, FileProcessingStatus status, string reason)>();
+
                 var options = new ExecutionDataflowBlockOptions
                 {
                     MaxDegreeOfParallelism = 8,
                 };
-                var search = new ActionBlock<SourceMedia>((media) => CopyItemToDestination(media, destinationPath, _source, _destination, cancellation), options);
+                var search = new ActionBlock<SourceMedia>((media) => CopyItemToDestination(media, destinationPath, _source, _destination, whatIf, cancellation), options);
 
                 await foreach (var media in _source.AcquireAsync(sourcePath, true, processImages, processVideos))
                 {
@@ -59,6 +69,23 @@ namespace Sukul.Media.Backup.Shared
             {
                 Trace.WriteLine(ex.ToString());
                 throw;
+            }
+            finally
+            {
+                var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                WriteToCSV($"{assemblyFolder}\\{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}-Processing-Result.csv");
+            }
+        }
+
+        private static void WriteToCSV(string fullFilename)
+        {
+            try
+            {
+                File.WriteAllLines(fullFilename, new List<string> { "Media,Status,Reason" }.Concat(FileProcessingResult.Select(l => $"{l.FullFilename},{l.status.ToString()},{l.reason}")));
+            }
+            catch (Exception ex)
+            {
+                Trace.WriteLine(ex.ToString());
             }
         }
 
@@ -76,14 +103,21 @@ namespace Sukul.Media.Backup.Shared
             return dateTime;
         }
 
-        public static async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, CancellationToken cancellation)
+        public static async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, bool whatIf, CancellationToken cancellation)
         {
             DateTime dateTime = default(DateTime);
 
-            IEnumerable<MetadataExtractor.Tag> tags;
-            using (var stream = new MemoryStream(media.Data))
+            IEnumerable<MetadataExtractor.Tag> tags = default;
+            using (var stream = new MemoryStream(media.Data))            
             {
-                tags = ImageMetadataReader.ReadMetadata(stream).SelectMany(d => d.Tags);
+                try
+                {
+                    tags = ImageMetadataReader.ReadMetadata(stream).SelectMany(d => d.Tags);
+                }
+                catch (Exception ex)
+                {
+                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"{ex.ToString()}"));
+                }
             }
 
             string desinationFolder;
@@ -95,7 +129,8 @@ namespace Sukul.Media.Backup.Shared
 
             if (!mappings.Any())
             {
-                Trace.WriteLine($"Unable to determine creation date for {media} Skipping .. ");
+                Trace.WriteLine($"Unable to determine creation date for {media.Reference} Skipping .. ");
+                FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"Unable to determine creation date for {media.Reference}"));
             }
             else
             {
@@ -104,12 +139,14 @@ namespace Sukul.Media.Backup.Shared
                 {
                     desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
 
-                    //desinationFolder = $"{destinationPath}\\{dateTime.Year}\\{dateTime.Month.ToString().PadLeft(2, '0')}\\{dateTime.Day.ToString().PadLeft(2, '0')}";
-
                     cancellation.ThrowIfCancellationRequested();
 
                     Trace.WriteLine($"Copying file to  {desinationFolder}");
-                    await destination.SaveAsync(desinationFolder, media.Data, media.Extension);
+                    if (!whatIf)
+                    {
+                        await destination.SaveAsync(desinationFolder, media.Data, media.Extension);
+                    }
+                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Success, string.Empty));
                     try
                     {
                         cancellation.ThrowIfCancellationRequested();
@@ -117,12 +154,13 @@ namespace Sukul.Media.Backup.Shared
                     }
                     catch
                     {
-                        Trace.WriteLine($"Unable to delete {media}. Please remove manually.");
+                        Trace.WriteLine($"Unable to delete {media.Reference}. Please remove manually.");
                     }
                 }
                 else
                 {
-                    Trace.WriteLine($"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for {media} Skipping .. ");
+                    Trace.WriteLine($"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media} Skipping .. ");
+                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media}"));
                 }
             }
         }

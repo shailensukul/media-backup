@@ -28,11 +28,17 @@ namespace Sukul.Media.Backup
         public bool Videos { get; set; }
 
       [Option(
-        'r',
-        "releteaftercopy",
+        'x',
+        "deleteaftercopy",
         Default = false,
         HelpText = "Delete files after copying.")]
         public bool DeleteAfterCopy { get; set; }
 
+        [Option(
+        'w',
+        "whatIf",
+        Default = false,
+        HelpText = "Do not save file, Run a hypothetical scenario only.")]
+        public bool WhatIf { get; set; }
     }
 }
