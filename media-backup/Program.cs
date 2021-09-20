@@ -42,7 +42,7 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"What If: {opts.WhatIf}");
             Trace.WriteLine($"Remove files after copying: {opts.DeleteAfterCopy}");
 
-            _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.WhatIf, new System.Threading.CancellationToken());
+            _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy, opts.WhatIf, new System.Threading.CancellationToken());
 
             Console.WriteLine("Finished. Press ENTER to exit");
             Console.ReadLine();

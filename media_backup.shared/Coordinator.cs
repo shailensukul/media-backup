@@ -44,7 +44,7 @@ namespace Sukul.Media.Backup.Shared
             _tasks = new Collection<Task>();
         }
 
-        public async void ProcessAsync(string sourcePath, string destinationPath, bool recursive, bool processImages, bool processVideos, bool whatIf,
+        public async void ProcessAsync(string sourcePath, string destinationPath, bool recursive, bool processImages, bool processVideos, bool deleteAfterCopy, bool whatIf,
             CancellationToken cancellation)
         {
             try
@@ -55,7 +55,7 @@ namespace Sukul.Media.Backup.Shared
                 {
                     MaxDegreeOfParallelism = 8,
                 };
-                var search = new ActionBlock<SourceMedia>((media) => CopyItemToDestination(media, destinationPath, _source, _destination, whatIf, cancellation), options);
+                var search = new ActionBlock<SourceMedia>((media) => CopyItemToDestination(media, destinationPath, _source, _destination, deleteAfterCopy, whatIf, cancellation), options);
 
                 await foreach (var media in _source.AcquireAsync(sourcePath, true, processImages, processVideos))
                 {
@@ -103,7 +103,7 @@ namespace Sukul.Media.Backup.Shared
             return dateTime;
         }
 
-        public static async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, bool whatIf, CancellationToken cancellation)
+        public static async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, bool deleteAfterCopy, bool whatIf, CancellationToken cancellation)
         {
             DateTime dateTime = default(DateTime);
 
@@ -150,7 +150,10 @@ namespace Sukul.Media.Backup.Shared
                     try
                     {
                         cancellation.ThrowIfCancellationRequested();
-                        source.Delete(media);
+                        if (deleteAfterCopy)
+                        {
+                            source.Delete(media);
+                        }
                     }
                     catch
                     {

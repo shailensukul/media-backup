@@ -24,6 +24,7 @@ namespace Sukul.Media.Backup
           'v',
           "video",
           Default = false,
+          Required = true,
           HelpText = "Copy all types of video files.")]
         public bool Videos { get; set; }
 
