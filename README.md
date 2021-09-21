@@ -2,13 +2,13 @@
 
 This is a .Net Standard library and sample program, which allows media files to be read from a source and transferred to a destination.
 The default instllation ships with a FileSystemProcessor, which copies file to a folder-based destination.
-The destination files are arranged by yyyy/mm/dd
 
-The pogram is laid out into the following projects:
-
-* media_backup.shared - contains shared interface and image helper functions
-* media_backup - this is a sample .Net Core console program
-* media_backup.filesystemprocessor - is an implementation of the `IMediaProcessor` interface, which copies media files to a filesystembased destination
+The destination files are arranged by the following and the creation date of the media is automatically extracted from the file.
+```
+yyyy
+	mm
+		dd
+```
 
 ## How to run the console program
 
@@ -16,17 +16,17 @@ Note: For the true or false parameters, skip the parameter if it is false. If yo
 
 To copy files from source folder to destination folder
 ```
-dotnet media-backup.dll -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v 
+media-backup.exe -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v 
 ```
 
 To copy files from source folder to destination folder and delete source files are copying.
 ```
-dotnet media-backup.dll -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v -x
+media-backup.exe -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v -x
 ```
 
 Simulate a file copy but do not actually copy files. This is useful to produce any error reports about problems with file metadata.
 ```
-dotnet media-backup.dll -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v -w
+media-backup.exe -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v -w
 ```
 
 ## Arguments
@@ -51,3 +51,5 @@ Two files are produced:
 * Add an option to strip identifying metadata from media files
 * Add an option to de-duplicate files based on a unique hashcode generated from the file contents (minus the metadata)
 * Use multithreaded file processing
+
+Disclaimer: Use at your own risk.
