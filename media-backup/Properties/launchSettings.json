@@ -2,7 +2,7 @@
   "profiles": {
     "media-backup": {
       "commandName": "Project",
-      "commandLineArgs": "-s \"D:\\Temp\\Media-Backup\\Source\" -d \"D:\\Temp\\Media-Backup\\Destination\" -i -v "
+      "commandLineArgs": "-s \"D:\\Temp\\Media-Backup\\Source\" -d \"\\\\192.168.86.41\\sukulshare\\Pictures\" -i -v "
     }
   }
 }
