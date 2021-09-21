@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
@@ -17,7 +18,7 @@ namespace media_backup.tests
     public class FilesAreCopiedWithoutDuplicates : SourceFileSpecification
     {
         DateTime start;
-
+        private readonly MultiThreadedFileWriter LogFileWriter = new MultiThreadedFileWriter();
         string currentDir = Directory.GetCurrentDirectory();
         string inputDir;
         string outDir;
@@ -26,6 +27,8 @@ namespace media_backup.tests
         {
             this.inputDir = $"{currentDir}\\source-files";
             this.outDir = $"{currentDir}\\destination-files";
+            var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            LogFileWriter.Start($"{assemblyFolder}\\{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}-Log.log", CancellationToken.None);
         }
 
         public override void  Given()
@@ -33,7 +36,7 @@ namespace media_backup.tests
             Directory.CreateDirectory(this.outDir);
             this._discovery = new FileSystemSource();
             this._destination = new FileSystemDestination();
-            this._coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(_discovery, _destination);
+            this._coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(_discovery, _destination, LogFileWriter);
         }
 
         public override void When()

@@ -1,5 +1,6 @@
 ﻿using MetadataExtractor;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -21,27 +22,28 @@ namespace Sukul.Media.Backup.Shared
 
         private readonly S _source;
         private readonly D _destination;
-
+        private readonly MultiThreadedFileWriter StatusFileWriter;
         private readonly ICollection<Task> _tasks;
+        private readonly MultiThreadedFileWriter Logger;
 
         private enum FileProcessingStatus
         {
             Success, Fail
         }
 
-        private static Collection<(string FullFilename, FileProcessingStatus status, string reason)> FileProcessingResult;
-
-        private static Collection<MediaCreatedDateTimeMapping> CreatedDateTimeMappings = new Collection<MediaCreatedDateTimeMapping>()
+        private Collection<MediaCreatedDateTimeMapping> CreatedDateTimeMappings = new Collection<MediaCreatedDateTimeMapping>()
         {
             new MediaCreatedDateTimeMapping { DirectoryName="QuickTime Movie Header", Name="Created", DateTimeParseFormat = "ddd MMM dd HH:mm:ss yyyy" },
             new MediaCreatedDateTimeMapping { DirectoryName="Exif IFD0", Name="Date/Time", DateTimeParseFormat = "yyyy:MM:dd HH:mm:ss" }
         };
 
-        public Coordinator(S source, D destination)
+        public Coordinator(S source, D destination, MultiThreadedFileWriter logger)
         {
             _source = source;
             _destination = destination;
             _tasks = new Collection<Task>();
+            Logger = logger;
+            StatusFileWriter = new MultiThreadedFileWriter();            
         }
 
         public async void ProcessAsync(string sourcePath, string destinationPath, bool recursive, bool processImages, bool processVideos, bool deleteAfterCopy, bool whatIf,
@@ -49,7 +51,9 @@ namespace Sukul.Media.Backup.Shared
         {
             try
             {
-                FileProcessingResult = new Collection<(string FullFilename, FileProcessingStatus status, string reason)>();
+                var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                StatusFileWriter.Start($"{assemblyFolder}\\{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}-Processing-Result.csv", cancellation);
+                StatusFileWriter.WriteLineWithoutTimeStamp($"File,Result,More Information");
 
                 var options = new ExecutionDataflowBlockOptions
                 {
@@ -68,42 +72,12 @@ namespace Sukul.Media.Backup.Shared
             catch (Exception ex)
             {
                 Trace.WriteLine(ex.ToString());
+                Logger.WriteLine(ex.ToString());    
                 throw;
             }
-            finally
-            {
-                var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                WriteToCSV($"{assemblyFolder}\\{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}-Processing-Result.csv");
-            }
         }
 
-        private static void WriteToCSV(string fullFilename)
-        {
-            try
-            {
-                File.WriteAllLines(fullFilename, new List<string> { "Media,Status,Reason" }.Concat(FileProcessingResult.Select(l => $"{l.FullFilename},{l.status.ToString()},{l.reason}")));
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine(ex.ToString());
-            }
-        }
-
-        private static DateTime ParseDateTime(string mediaDateTime, DateTime fr)
-        {
-            DateTime dateTime = default(DateTime);
-
-            if (DateTime.TryParseExact(Convert.ToString(mediaDateTime), "ddd MMM dd hh:mm:ss yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
-            {
-            }
-            else if (DateTime.TryParseExact(Convert.ToString(mediaDateTime), "yyyy: MM:dd HH: mm:ss", CultureInfo.CurrentCulture, DateTimeStyles.None, out dateTime))
-            {
-            }
-
-            return dateTime;
-        }
-
-        public static async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, bool deleteAfterCopy, bool whatIf, CancellationToken cancellation)
+        public async Task CopyItemToDestination(SourceMedia media, string destinationPath, S source, D destination, bool deleteAfterCopy, bool whatIf, CancellationToken cancellation)
         {
             DateTime dateTime = default(DateTime);
 
@@ -116,7 +90,7 @@ namespace Sukul.Media.Backup.Shared
                 }
                 catch (Exception ex)
                 {
-                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"{ex.ToString()}"));
+                    StatusFileWriter.WriteLineWithoutTimeStamp($"\"{media.Reference}\",\"{FileProcessingStatus.Fail}\",\"{ex.ToString()}\"");
                 }
             }
 
@@ -130,7 +104,9 @@ namespace Sukul.Media.Backup.Shared
             if (!mappings.Any())
             {
                 Trace.WriteLine($"Unable to determine creation date for {media.Reference} Skipping .. ");
-                FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"Unable to determine creation date for {media.Reference}"));
+                Logger.WriteLine($"Unable to determine creation date for {media.Reference} Skipping .. ");
+
+                StatusFileWriter.WriteLineWithoutTimeStamp($"\"{media.Reference}\",\"{FileProcessingStatus.Fail}\",\"Unable to determine creation date for {media.Reference}\"");
             }
             else
             {
@@ -141,12 +117,14 @@ namespace Sukul.Media.Backup.Shared
 
                     cancellation.ThrowIfCancellationRequested();
 
-                    Trace.WriteLine($"Copying file to  {desinationFolder}");
+                    Trace.WriteLine($"Copying {media.Reference} to  {desinationFolder}");
+                    Logger.WriteLine($"Copying {media.Reference} to {desinationFolder}");
+
                     if (!whatIf)
                     {
                         await destination.SaveAsync(desinationFolder, media.Data, media.Extension);
                     }
-                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Success, string.Empty));
+                    StatusFileWriter.WriteLineWithoutTimeStamp($"\"{media.Reference}\",\"{FileProcessingStatus.Success}\",\"{string.Empty}\"");
                     try
                     {
                         cancellation.ThrowIfCancellationRequested();
@@ -158,12 +136,14 @@ namespace Sukul.Media.Backup.Shared
                     catch
                     {
                         Trace.WriteLine($"Unable to delete {media.Reference}. Please remove manually.");
+                        Logger.WriteLine($"Unable to delete {media.Reference}. Please remove manually.");
                     }
                 }
                 else
                 {
                     Trace.WriteLine($"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media} Skipping .. ");
-                    FileProcessingResult.Add((media.Reference, FileProcessingStatus.Fail, $"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media}"));
+                    Logger.WriteLine($"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media} Skipping .. ");
+                    StatusFileWriter.WriteLineWithoutTimeStamp($"\"{media.Reference}\",\"{FileProcessingStatus.Fail}\",\"Unable to parse creation date ({mapping.Tag.Description}) with format {mapping.Mapping.DateTimeParseFormat} for directory {mapping.Mapping.DirectoryName} for {media}\"");
                 }
             }
         }

@@ -10,6 +10,8 @@ namespace Sukul.Media.Backup
     using System.Globalization;
     using System.IO;
     using System.Reflection;
+    using System.Threading;
+    using System.Threading.Tasks;
     using CommandLine;
     using Sukul.Media.Backup.FileSystem;
     using Sukul.Media.Backup.Shared;
@@ -17,21 +19,45 @@ namespace Sukul.Media.Backup
     class Program
     {
 
-        static Coordinator<IMediaDiscovery, IMediaDestination> _coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(new FileSystemSource(), new FileSystemDestination());
+        static Coordinator<IMediaDiscovery, IMediaDestination> _coordinator;
+        private static CancellationTokenSource CancellationTokenSource = new CancellationTokenSource();
+        private static readonly MultiThreadedFileWriter LogFileWriter = new MultiThreadedFileWriter();
 
+        private enum ExitCode : int
+        {
+            Success = 0,
+            UnknownError = 10
+        }
 
         static void Main(string[] args)
         {
-            Trace.Listeners.Add(new ConsoleTraceListener(true));
-            CommandLine.Parser.Default.ParseArguments<Options>(args)
-               .WithParsed(RunOptions)
-               .WithNotParsed(HandleParseError);
+            try
+            {
+                var assemblyFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                LogFileWriter.Start($"{assemblyFolder}\\{DateTime.Now.ToString("dd-MM-yyyy-HH-mm-ss")}-Log.log", CancellationTokenSource.Token);
+                _coordinator = new Coordinator<IMediaDiscovery, IMediaDestination>(new FileSystemSource(), new FileSystemDestination(), LogFileWriter);
+                ConsoleTraceListener listener = new ConsoleTraceListener();
+                Trace.Listeners.Add(listener);
 
-            //if (args.Length > 0)
-            //// https://andrewlock.net/using-dependency-injection-in-a-net-core-console-application/
+                CommandLine.Parser.Default.ParseArguments<Options>(args)
+                   .WithParsed(RunOptions)
+                   .WithNotParsed(HandleParseError);
+            }
+            catch (Exception ex)
+            {
+                CancellationTokenSource.Cancel();
+                Trace.WriteLine(ex.ToString());
+                LogFileWriter.WriteLine(ex.ToString());
+
+                Task.Delay(200);
+                Environment.Exit((int)ExitCode.UnknownError);
+            }
+
+            Task.Delay(200);
+            Environment.Exit((int)ExitCode.Success);
         }
 
-        static async void RunOptions(Options opts)
+        static void RunOptions(Options opts)
         {
             //handle options
             Trace.Indent();
@@ -42,7 +68,7 @@ namespace Sukul.Media.Backup
             Trace.WriteLine($"What If: {opts.WhatIf}");
             Trace.WriteLine($"Remove files after copying: {opts.DeleteAfterCopy}");
 
-            _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy, opts.WhatIf, new System.Threading.CancellationToken());
+            _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy, opts.WhatIf, CancellationTokenSource.Token);
 
             Console.WriteLine("Finished. Press ENTER to exit");
             Console.ReadLine();
@@ -54,6 +80,7 @@ namespace Sukul.Media.Backup
             foreach (var err in errs)
             {
                 Console.WriteLine(err.ToString());
+                LogFileWriter.WriteLine(err.ToString());
             }
         }
     }
