@@ -70,7 +70,8 @@ namespace Sukul.Media.Backup
 
             _coordinator.ProcessAsync(opts.SourcePath, opts.DestinationPath, true, opts.Images, opts.Videos, opts.DeleteAfterCopy, opts.WhatIf, CancellationTokenSource.Token);
 
-            Console.WriteLine("Finished. Press ENTER to exit");
+            Trace.WriteLine("Finished. Press ENTER to exit");
+            LogFileWriter.WriteLine("Finished. Press ENTER to exit");
             Console.ReadLine();
         }
 
