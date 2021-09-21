@@ -37,7 +37,7 @@ media-backup.exe -s C:\temp\Pictures\Source -d D:\Temp\Destination -i -v -w
 | `-i`          | copy images? true or false. Omit if false |
 | `-v`          | copy videos? true or false. Omit if false |
 | `-x`		    | delete files after copying? true or false. Omit if false |
-| `-w`			| do not save file. Run a hypothetical scenario only. true or false. Omit if  |
+| `-w`			| do not save file. Run a hypothetical scenario only. true or false. Omit if false |
 
 ## Output
 Two files are produced:
