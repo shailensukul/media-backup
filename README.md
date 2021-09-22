@@ -57,7 +57,7 @@ Every execution produces two files:
 ## Roadmap
 
 * Add an option to strip identifying metadata from media files
-* ---Add an option to de-duplicate files based on a unique hashcode generated from the file contents (minus the metadata)---
-* ---Use multithreaded file processing---
+* ~~Add an option to de-duplicate files based on a unique hashcode generated from the file contents (minus the metadata)~~
+* ~~Use multithreaded file processing~~
 
 Disclaimer: Use at your own risk.
