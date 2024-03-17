@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Sukul.Media.Backup</RootNamespace>
     <RepositoryUrl>https://github.com/shailensukul/media-backup</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
